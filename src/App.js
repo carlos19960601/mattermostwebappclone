@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from "react-redux";
+import { Router, Switch } from "react-router-dom";
+import SignupEmail from "./container/signup/signup_email";
+import store from "./store";
+import { browserHistory } from "./utils/browser_history";
+import { HFTRoute } from "./utils/router";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Router history={browserHistory}>
+        <Switch>
+          <HFTRoute path="/signup_email" component={SignupEmail} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 
