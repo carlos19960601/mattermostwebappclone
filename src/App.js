@@ -1,17 +1,17 @@
-import { Provider } from "react-redux";
-import { Router, Switch } from "react-router-dom";
-import SignupEmail from "./container/signup/signup_email";
-import store from "./store";
-import { browserHistory } from "./utils/browser_history";
-import { HFTRoute } from "./utils/router";
+import Root from "@/components/app";
+import "@/sass/styles.scss";
+import store from "@/store";
+import { browserHistory } from "@/utils/browser_history";
 
-function App() {
+import { Provider } from "react-redux";
+import { Route, Router, Switch } from "react-router-dom";
+
+function App(props) {
   return (
     <Provider store={store}>
       <Router history={browserHistory}>
-        <Switch>
-          <HFTRoute path="/signup_email" component={SignupEmail} />
-        </Switch>
+        <Route path="/" component={Root} />
+       
       </Router>
     </Provider>
   );
