@@ -5,18 +5,18 @@ export const currentUserIdSlice = createSlice({
   initialState: "",
   reducers: {
     login: (state, action) => {
-      const user = action.data;
+      const user = action.playload;
       return user ? user.id : state;
     },
     loginSuccess: (state) => {
       return "";
     },
     receivedMe: (state, action) => {
-      const data = action.data || action.payload;
+      const data = action.payload;
       return data.id;
     },
   },
 });
 
 export const { login, loginSuccess, receivedMe } = currentUserIdSlice.actions;
-export const { currentUserIdReducer } = currentUserIdSlice.reducer;
+export default currentUserIdSlice.reducer;

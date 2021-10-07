@@ -1,5 +1,5 @@
-import logoImage from "@/assets/images/logo.png";
-import SiteNameAndDescription from "@/components/common/site_name_and_description";
+import logoImage from "../../../assets/images/logo.png";
+import SiteNameAndDescription from "../../common/site_name_and_description";
 
 export default function SignupEmail(props) {
   const { customDescriptionText, siteName } = props;

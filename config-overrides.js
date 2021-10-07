@@ -19,8 +19,8 @@ module.exports = override(
         },
       };
     }
-  }),
-  addWebpackAlias({
-    "@": resolve("src"),
   })
+  // addWebpackAlias({
+  //   "@": resolve("src"),
+  // })
 );
