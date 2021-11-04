@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logoImage from "../../../assets/images/logo.png";
+import { t } from "../../../utils/i18n";
 import AnnouncementBar from "../../announcement_bar/announcement_bar_controller";
 import BackButton from "../../common/back_button";
 import LocalizedIcon from "../../localized_icon";
@@ -12,9 +14,13 @@ export default function SignupController(props) {
   const [noOpenServerError] = useState(false);
   const [usedBefore, setUsedBefore] = useState(false);
 
+  const enableSignUpWithEmail = useSelector((state) => {
+    return state.general.config.enableSignUpWithEmail;
+  });
+  
   const renderSignupControls = () => {
     let signupControls = [];
-    if (props.enableSignUpWithEmail) {
+    if (enableSignUpWithEmail) {
       signupControls.push(
         <Link to={"/signup_email" + window.location.search}>
           <span>

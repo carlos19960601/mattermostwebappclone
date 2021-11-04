@@ -1,7 +1,9 @@
-import React from "react";
-import { injectIntl } from "react-intl";
+import { forwardRef } from "react";
+import { useIntl } from "react-intl";
 
-const LocalizedIcon = React.forwardRef((props, ref) => {
+const LocalizedIcon = (props, ref) => {
+  const { formatMessage } = useIntl();
+
   const { component = "i", ariaLabel, title, ...otherProps } = props;
   if (component !== "i" && component !== "span") {
     return null;
@@ -9,7 +11,6 @@ const LocalizedIcon = React.forwardRef((props, ref) => {
 
   // Use an uppercase name since JSX thinks anything lowercase is an HTML tag
   const Component = component;
-  const { formatMessage } = useIntl();
   const iconProps = {
     ...otherProps,
   };
@@ -28,6 +29,6 @@ const LocalizedIcon = React.forwardRef((props, ref) => {
   }
 
   return <Component ref={ref} {...iconProps} />;
-});
+};
 
-export default injectIntl(LocalizedIcon, { forwardRef: true });
+export default forwardRef(LocalizedIcon);
