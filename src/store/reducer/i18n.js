@@ -8,7 +8,6 @@ export const i18nSlice = createSlice({
   reducers: {
     loadTranslations: (state, action) => {
       const url = action.playload;
-      console.log(url);
     },
   },
 });

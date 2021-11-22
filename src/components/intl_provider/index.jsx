@@ -9,7 +9,7 @@ export default function IntlProvider(props) {
   const dispatch = useDispatch()
 
   const locale = useSelector((state) => {
-    const currentUser = state.profiles[state.currentUserId]
+    const currentUser = state.users.profiles[state.users.currentUserId]
     if (!currentUser) {
       return "zh-CN"
     }
@@ -27,7 +27,6 @@ export default function IntlProvider(props) {
     }
 
     translations = I18n.getAllLanguages()["zh-CN"].url
-    console.log(translations)
     return translations
   })
 
