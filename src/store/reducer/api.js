@@ -26,7 +26,30 @@ export const apiSlice = createApi({
         data: user,
       }),
     }),
+    loginById: builder.mutation({
+      query: ({ id, password }) => ({
+        url: "/users/login",
+        method: "POST",
+        data: {
+          id,
+          password,
+        },
+      }),
+    }),
+    login: builder.mutation({
+      query: ({ loginId, password, token = "", deviceId = "" }) => ({
+        url: "/users/login",
+        method: "POST",
+        data: {
+          device_id: deviceId,
+          login_id: loginId,
+          password,
+          token,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useCreateUserMutation } = apiSlice;
+export const { useCreateUserMutation, useLoginByIdMutation, useLoginMutation } =
+  apiSlice;

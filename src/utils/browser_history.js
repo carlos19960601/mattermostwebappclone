@@ -1,5 +1,12 @@
 import { createBrowserHistory } from "history";
 
-export const browserHistory = createBrowserHistory({
+const b = createBrowserHistory({
   basename: window.basename,
 });
+
+export const browserHistory = {
+  ...b,
+  push: (path, ...args) => {
+    b.push(path, ...args);
+  },
+};

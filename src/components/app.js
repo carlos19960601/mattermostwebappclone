@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { Switch } from "react-router-dom";
-import { HFTRoute } from "../utils/router";
+import { HFTRoute, LoggedInHFTRoute } from "./header_footer_template_route";
 import IntlProvider from "./intl_provider";
+import LoginController from "./login/login_controller";
+import SelectTeam from "./select_team";
 import SignupController from "./signup/signup_controller";
 import SignupEmail from "./signup/signup_email";
 
@@ -17,6 +19,8 @@ export default function App(props) {
       <Switch>
         <HFTRoute path="/signup_email" component={SignupEmail} />
         <HFTRoute path={"/signup_user_complete"} component={SignupController} />
+        <HFTRoute path={"/login"} component={LoginController} />
+        <LoggedInHFTRoute path={"/select_team"} component={SelectTeam} />
       </Switch>
     </IntlProvider>
   );

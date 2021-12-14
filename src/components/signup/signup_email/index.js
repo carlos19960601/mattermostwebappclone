@@ -3,8 +3,13 @@ import { FormattedMessage } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logoImage from "../../../assets/images/logo.png";
-import { useCreateUserMutation } from "../../../store/reducer/api";
-import { receivedProfiles } from "../../../store/reducer/users";
+import {
+  useCreateUserMutation,
+  useLoginByIdMutation,
+} from "../../../store/reducer/api";
+import { selectConfig } from "../../../store/reducer/general";
+import { receivedMe, receivedProfiles } from "../../../store/reducer/users";
+import { browserHistory } from "../../../utils/browser_history";
 import Constants from "../../../utils/constants";
 import BackButton from "../../common/back_button";
 import SiteNameAndDescription from "../../common/site_name_and_description";
@@ -15,9 +20,9 @@ export default function SignupEmail(props) {
 
   const dispatch = useDispatch();
 
-  const enableSignUpWithEmail = useSelector((state) => {
-    return state.general.config.enableSignUpWithEmail;
-  });
+  const loadedRoles = useSelector((state) => state.roles.roles);
+
+  const enableSignUpWithEmail = useSelector(selectConfig).EnableSignUpWithEmail;
 
   const emailRef = useRef(null);
   const nameRef = useRef(null);
@@ -34,7 +39,8 @@ export default function SignupEmail(props) {
   const [token, setToken] = useState("");
   const [inviteId, setInviteId] = useState("");
 
-  const [createUser, { isLoading }] = useCreateUserMutation();
+  const [createUser] = useCreateUserMutation();
+  const [loginById] = useLoginByIdMutation();
 
   const isUserValid = function () {
     const providedEmail = emailRef.current?.value.trim();
@@ -46,8 +52,24 @@ export default function SignupEmail(props) {
     return true;
   };
 
-  const handleSignupSuccess = (user, data) => {
-    
+  const redirectUserToDefaultTeam = (loginedUser) => {
+    browserHistory.push("/select_team");
+  };
+
+  const handleSignupSuccess = async (user, created) => {
+    let loginedUser = null;
+    try {
+      loginedUser = await loginById({
+        id: created.id,
+        password: user.password,
+      }).unwrap();
+    } catch (err) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    dispatch(receivedMe(loginedUser));
+    redirectUserToDefaultTeam(loginedUser);
   };
 
   const handleSubmit = async (e) => {
@@ -79,8 +101,6 @@ export default function SignupEmail(props) {
           inviteId,
           redirectTo,
         }).unwrap();
-
-        console.log("====", result);
 
         dispatch(
           receivedProfiles({

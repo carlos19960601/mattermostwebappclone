@@ -3,6 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import logoImage from "../../../assets/images/logo.png";
+import { selectConfig } from "../../../store/reducer/general";
 import { t } from "../../../utils/i18n";
 import AnnouncementBar from "../../announcement_bar/announcement_bar_controller";
 import BackButton from "../../common/back_button";
@@ -14,10 +15,10 @@ export default function SignupController(props) {
   const [noOpenServerError] = useState(false);
   const [usedBefore, setUsedBefore] = useState(false);
 
-  const enableSignUpWithEmail = useSelector((state) => {
-    return state.general.config.enableSignUpWithEmail;
-  });
-  
+  const enableSignUpWithEmail = useSelector(selectConfig).EnableSignUpWithEmail;
+  const enableSignUpWithGitLab =
+    useSelector(selectConfig).EnableSignUpWithGitLab;
+
   const renderSignupControls = () => {
     let signupControls = [];
     if (enableSignUpWithEmail) {
@@ -41,7 +42,24 @@ export default function SignupController(props) {
       );
     }
 
-    if (props.enableSignUpWithGitLab) {
+    if (enableSignUpWithGitLab) {
+      signupControls.push(
+        <a
+          className="btn btn-custom-login btn--full gitlab"
+          key="gitlab"
+          href={""}
+        >
+          <span>
+            <span className="icon" />
+            <span>
+              <FormattedMessage
+                id="signup.gitlab"
+                defaultMessage="GitLab Single Sign-On"
+              />
+            </span>
+          </span>
+        </a>
+      );
     }
 
     if (props.isLicensed && props.enableSignUpWithGoogle) {
@@ -58,6 +76,16 @@ export default function SignupController(props) {
 
     if (props.isLicensed && props.enableSAML) {
     }
+    if (signupControls.length === 0) {
+      // const signupDisabledError = (
+      //   <FormattedMessage
+      //     id="signup_user_completed.none"
+      //     defaultMessage="No user creation method has been enabled. Please contact an administrator for access."
+      //   />
+      // );
+      // signupControls = <FormError error={signupDisabledError} margin={true} />;
+    }
+
     return signupControls;
   };
 
