@@ -1,9 +1,20 @@
 import { useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import logoImage from "../../../assets/images/logo.png";
-import { useLoginMutation } from "../../../store/reducer/api";
+import {
+  useGetRolesByNamesMutation,
+  useLoginMutation,
+} from "../../../store/reducer/api";
 import { selectConfig } from "../../../store/reducer/general";
+import {
+  reveiveRoles,
+  selectLoadedRoles,
+  selectPendingRoles,
+  setPendingRoles,
+} from "../../../store/reducer/roles";
+import { receivedMe } from "../../../store/reducer/users";
+import { browserHistory } from "../../../utils/browser_history";
 import { t } from "../../../utils/i18n";
 import * as Utils from "../../../utils/utils";
 import AnnouncementBar from "../../announcement_bar/announcement_bar_controller";
@@ -14,9 +25,14 @@ import LoadingWrapper from "../../widgets/loading/loading_wrapper";
 
 const LoginController = (props) => {
   const { location } = props;
+
+  const dispatch = useDispatch();
+
   // Store
   const config = useSelector(selectConfig);
   const emailSigninEnabled = config.EnableSignInWithEmail;
+  const pendingRoles = useSelector(selectPendingRoles);
+  const loadedRoles = useSelector(selectLoadedRoles);
 
   // State
   const [showMfa, setShowMfa] = useState(false);
@@ -31,6 +47,7 @@ const LoginController = (props) => {
 
   // API
   const [loginAPI] = useLoginMutation();
+  const [getRolesByNames] = useGetRolesByNamesMutation();
 
   const preSubmit = (e) => {
     e.preventDefault();
@@ -82,16 +99,48 @@ const LoginController = (props) => {
     submit(loginId, password, "");
   };
 
-  const submit = (loginId, password, token) => {
+  const submit = async (loginId, password, token) => {
     setLoading(true);
     setServerError(null);
 
     try {
-      loginAPI({
+      const data = await loginAPI({
         loginId,
         password,
         token,
       }).unwrap();
+
+      dispatch(receivedMe(data));
+      dispatch()
+
+      const roles = new Set();
+      for (const role of data.roles.split(" ")) {
+        roles.add(role);
+      }
+
+      let tempPendingRoles = new Set(pendingRoles);
+      if (roles.size > 0) {
+        for (const role of roles) {
+          tempPendingRoles.add(role);
+        }
+        const newRoles = new Set();
+        for (const role of tempPendingRoles) {
+          if (!loadedRoles[role] && role.trim() !== "") {
+            newRoles.add(role);
+          }
+        }
+
+        if (tempPendingRoles) {
+          dispatch(setPendingRoles([]));
+        }
+
+        if (newRoles.size > 0) {
+          const rolesRes = await getRolesByNames({
+            rolesNames: Array.from(newRoles),
+          }).unwrap();
+          dispatch(reveiveRoles(rolesRes));
+        }
+      }
 
       finishSignin();
     } catch (error) {
@@ -130,7 +179,15 @@ const LoginController = (props) => {
   };
 
   const finishSignin = (team) => {
-    
+    if (team) {
+      browserHistory.push(`/${team.name}`);
+    } else {
+      redirectUserToDefaultTeam();
+    }
+  };
+
+  const redirectUserToDefaultTeam = () => {
+    browserHistory.push("/select_team");
   };
 
   const handleLoginIdChange = (e) => {

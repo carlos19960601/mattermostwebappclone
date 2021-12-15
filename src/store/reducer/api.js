@@ -5,7 +5,10 @@ const axiosBaseQuery =
   () =>
   async ({ url, method, data }) => {
     try {
-      const result = await http({ url, method, data });
+      const result = await http.doFetch({ url, method, data });
+      if (result.headers["token"]) {
+        http.setToken(result.headers["token"]);
+      }
       return { data: result.data };
     } catch (axiosError) {
       let err = axiosError;
@@ -48,8 +51,19 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    getRolesByNames: builder.mutation({
+      query: ({ rolesNames }) => ({
+        url: "/roles/names",
+        method: "POST",
+        data: rolesNames,
+      }),
+    }),
   }),
 });
 
-export const { useCreateUserMutation, useLoginByIdMutation, useLoginMutation } =
-  apiSlice;
+export const {
+  useCreateUserMutation,
+  useLoginByIdMutation,
+  useLoginMutation,
+  useGetRolesByNamesMutation,
+} = apiSlice;

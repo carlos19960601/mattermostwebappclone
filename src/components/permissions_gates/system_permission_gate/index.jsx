@@ -1,22 +1,21 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { selectMySystemPermissions } from "../../../store/reducer/users";
 
 const SystemPermissionGate = (props) => {
+  const permissions = useSelector(selectMySystemPermissions);
 
-  const permissions = useSelector(selectMySystemPermissions)
-
-  let hasPermission = false
+  let hasPermission = false;
   for (const permission of props.permissions) {
     if (permissions.has(permission)) {
-      hasPermission = true
-      break
+      hasPermission = true;
+      break;
     }
   }
 
   if (hasPermission) {
-    return props.children
+    return props.children;
   }
-  return null
-}
+  return null;
+};
 
-export default SystemPermissionGate
+export default SystemPermissionGate;
