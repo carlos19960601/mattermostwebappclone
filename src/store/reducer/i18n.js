@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import General from "../../constants/general";
+import { General } from "../../constants";
 
 export const i18nSlice = createSlice({
   name: "i18n",

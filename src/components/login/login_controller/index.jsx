@@ -13,7 +13,7 @@ import {
   selectPendingRoles,
   setPendingRoles,
 } from "../../../store/reducer/roles";
-import { receivedMe } from "../../../store/reducer/users";
+import { receivedMe, receivedProfile } from "../../../store/reducer/users";
 import { browserHistory } from "../../../utils/browser_history";
 import { t } from "../../../utils/i18n";
 import * as Utils from "../../../utils/utils";
@@ -111,7 +111,7 @@ const LoginController = (props) => {
       }).unwrap();
 
       dispatch(receivedMe(data));
-      dispatch()
+      dispatch(receivedProfile(data));
 
       const roles = new Set();
       for (const role of data.roles.split(" ")) {

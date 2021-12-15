@@ -13,6 +13,10 @@ export const usersSlice = createSlice({
         state.profiles[key] = profiles[key];
       });
     },
+    receivedProfile: (state, action) => {
+      let profile = action.payload;
+      state.profiles[profile.id] = profile;
+    },
     receivedMe: (state, action) => {
       const user = action.payload;
       state.currentUserId = user.id;
@@ -21,12 +25,18 @@ export const usersSlice = createSlice({
 });
 
 // selectors
-export const selectProfiles = (state) => state.users.profiles;
-export const selectCurrentUserId = (state) => state.users.currentUserId;
+export const selectProfiles = (state) => {
+  return state.users.profiles;
+};
+export const selectCurrentUserId = (state) => {
+  return state.users.currentUserId;
+};
 
 export const selectCurrentUser = createSelector(
   [selectCurrentUserId, selectProfiles],
-  (profiles, userId) => profiles[userId]
+  (userId, profiles) => {
+    return profiles[userId];
+  }
 );
 
 export const selectMySystemRoles = createSelector(
@@ -55,5 +65,6 @@ export const selectMySystemPermissions = createSelector(
   }
 );
 
-export const { receivedProfiles, receivedMe } = usersSlice.actions;
+export const { receivedProfiles, receivedProfile, receivedMe } =
+  usersSlice.actions;
 export default usersSlice.reducer;

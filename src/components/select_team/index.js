@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import logoImage from "../../assets/images/logo.png";
+import { Permissions } from "../../constants";
 import * as UserAgent from "../../utils/user_agent";
 import AnnouncementBar from "../announcement_bar/announcement_bar_controller";
 import BackButton from "../common/back_button";
