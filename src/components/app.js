@@ -10,7 +10,7 @@ import SignupEmail from "./signup/signup_email";
 
 export default function App(props) {
   useEffect(() => {
-    if (props.location.pathname == "/") {
+    if (props.location.pathname === "/") {
       props.history.push("/signup_user_complete");
     }
   });
