@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import http from "../../http_common";
 
 const axiosBaseQuery =
-  () =>
+  (args, thunkApi, extraOptions) =>
   async ({ url, method, data }) => {
     try {
       const result = await http.doFetch({ url, method, data });
@@ -18,7 +18,7 @@ const axiosBaseQuery =
     }
   };
 
-export const apiSlice = createApi({
+export const api = createApi({
   reducerPath: "api",
   baseQuery: axiosBaseQuery(),
   endpoints: (builder) => ({
@@ -58,6 +58,19 @@ export const apiSlice = createApi({
         data: rolesNames,
       }),
     }),
+    checkIsTeamExists: builder.mutation({
+      query: (teamName) => ({
+        url: `/teams/name/${teamName}/exists`,
+        method: "GET",
+      }),
+    }),
+    createTeam: builder.mutation({
+      query: (team) => ({
+        url: "/teams",
+        method: "POST",
+        data: team,
+      }),
+    }),
   }),
 });
 
@@ -66,4 +79,6 @@ export const {
   useLoginByIdMutation,
   useLoginMutation,
   useGetRolesByNamesMutation,
-} = apiSlice;
+  useCheckIsTeamExistsMutation,
+  useCreateTeamMutation,
+} = api;

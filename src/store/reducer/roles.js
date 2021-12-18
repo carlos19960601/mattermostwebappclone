@@ -4,7 +4,7 @@ export const rolesSlice = createSlice({
   name: "roles",
   initialState: {
     roles: {},
-    pending: new Set(),
+    pending: [],
   },
   reducers: {
     setPendingRoles: (state, action) => {

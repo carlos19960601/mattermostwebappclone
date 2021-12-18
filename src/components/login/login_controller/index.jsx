@@ -85,6 +85,7 @@ const LoginController = (props) => {
           }}
         />
       );
+      return;
     }
 
     if (!password) {
@@ -94,6 +95,7 @@ const LoginController = (props) => {
           defaultMessage="Please enter your password"
         />
       );
+      return;
     }
 
     submit(loginId, password, "");
@@ -130,7 +132,7 @@ const LoginController = (props) => {
           }
         }
 
-        if (tempPendingRoles) {
+        if (pendingRoles) {
           dispatch(setPendingRoles([]));
         }
 

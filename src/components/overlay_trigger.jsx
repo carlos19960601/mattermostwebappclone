@@ -19,11 +19,15 @@ const OverlayTrigger = (props, ref) => {
     <IntlContext.Consumer>
       {(intl) => {
         const overlayProps = { ...overlay.props };
+        if (disabled) {
+          overlayProps.style = { visibility: "hidden", ...overlayProps.style };
+        }
         return (
           <OriginalOverlayTrigger
+            {...otherProps}
             ref={ref}
             overlay={<OverlayWrapper {...overlayProps} intl={intl} />}
-          ></OriginalOverlayTrigger>
+          />
         );
       }}
     </IntlContext.Consumer>

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { apiSlice } from "./reducer/api";
+import { api } from "./reducer/api";
 import channelsReducer from "./reducer/channels";
 import generalReducer from "./reducer/general";
 import i18nReducer from "./reducer/i18n";
@@ -15,8 +15,8 @@ export default configureStore({
     teams: teamsReducer,
     channels: channelsReducer,
     roles: rolesReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(api.middleware),
 });
