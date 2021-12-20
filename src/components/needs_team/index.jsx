@@ -4,7 +4,7 @@ import ChannelController from "../channel_layout/channel_controller";
 
 const NeedsTeam = () => {
   const [finishedFetchingChannels, setFinishedFetchingChannels] =
-    useState(false);
+    useState(true);
 
   return (
     <Switch>
